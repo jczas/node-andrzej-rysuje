@@ -1,0 +1,116 @@
+pre 1. Install node.js
+pre 2. Install express
+% npm install -g express-generator
+
+pre 3. Install 
+%n npm install -g nodemon
+
+1. Prepare new project in console:
+% express node-andrzej-rysuje --view=pug
+
+2. Install modules
+% npm install
+
+3. Start node.js using nodemon
+% nodemon ./bin/www
+
+4. Open site in browser http://127.0.0.1:3000/
+
+5. Install xmldom modul
+% npm install xmldom --save
+
+6. Install xpath modul
+% npm install xpath --save
+
+7. Install request modul
+% npm install request --save
+
+8. Request rss from: http://www.andrzejrysuje.pl/wordpress/feed/
+8.1. Import modul
+---
+var request = require('request');
+---
+
+8.2. Request rss
+--- 
+  var url = 'http://www.andrzejrysuje.pl/wordpress/feed/';
+
+  request(url, function (error, response, xml) {
+    if (!error) {
+      res.send(xml);
+    } else {
+      res.status(404);
+      res.send('Problem with ' + url);
+    }
+  });
+---
+
+9. Get img.src
+9.1. Import modules
+---
+var xpath = require('xpath');
+var dom = require('xmldom').DOMParser;
+---
+
+9.2. Find nodes (encoded)
+---
+      var doc = new dom().parseFromString(xml);
+      var select = xpath.useNamespaces({ 'content': 'http://purl.org/rss/1.0/modules/content/' });
+      var nodes = select('//content:encoded', doc);
+      console.log('nodes.length: ' + nodes.length);
+---
+
+10. Take img and alt with regex
+---
+      var imgEx = /src="([^"]*)"/;
+      var altEx = /alt="([^"]*)"/;
+
+      for (var i = 0, len = nodes.length; i < len; i++) {
+        var data = nodes[i].firstChild.data;
+
+        var altMatch = altEx.exec(data);
+        var imgMatch = imgEx.exec(data);
+        if (imgMatch !== null && altMatch !== null) {
+          console.log('img: ' + imgMatch[1]);
+          console.log('alt: ' + altMatch[1]);
+        }      }
+---
+
+11. Install rss modul
+% npm install rss --save
+
+12. Generate rss feed
+12.1. Import modul
+---
+var RSS = require('rss');
+---
+
+12.2. Create rss feed 
+---
+      var feed = new RSS({
+        title: 'Andrzej Rysuje',
+        site_url: 'http://www.andrzejrysuje.pl',
+        image_url: 'http://www.andrzejrysuje.pl/assets/img/logo.png',
+        ttl: '5'
+      });
+---
+
+12.3. Return rss feed
+---
+                    res.set('Content-Type', 'text/xml');
+                    res.send(feed.xml());
+---
+12.4. Add item
+---
+          feed.item({
+            title: altMatch,
+            url: imgMatch
+          });
+---
+
+13. Add repository on github: https://github.com/
+
+
+
+
+
