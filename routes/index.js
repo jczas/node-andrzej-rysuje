@@ -39,8 +39,8 @@ router.get('/', function (req, res, next) {
           console.log('alt: ' + altMatch[1]);
 
           feed.item({
-            title: altMatch,
-            url: imgMatch
+            title: altMatch[1],
+            url: imgMatch[1]
           });
         }
 

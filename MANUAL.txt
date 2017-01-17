@@ -14,7 +14,30 @@ pre 3. Install
 3. Start node.js using nodemon
 % nodemon ./bin/www
 
-4. Open site in browser http://127.0.0.1:3000/
+3.1. Open site in browser http://127.0.0.1:3000/
+
+4. Add repository on github: https://github.com/
+4.1. Create .gitignore: https://github.com/github/gitignore
+% echo "# node-andrzej-rysuje" >> README.md
+% git init
+
+4.2. Add to repository, commit and push
+% git add *
+% git ci -m "init version"
+% git remote add origin https://github.com/jczas/node-andrzej-rysuje.git
+% git push -u origin master
+
+5. Azure
+5.1 login
+> azure login
+> azure config mode arm
+> azure group create node-andrzej-rysuje-rg --location 'North Europe'
+> azure appserviceplan create --resource-group node-andrzej-rysuje-rg --name node-andrzej-rysuje-sp --location 'North Europe' --sku F1
+> azure webapp create --resource-group node-andrzej-rysuje-rg --plan node-andrzej-rysuje-sp --name node-andrzej-rysuje --location 'North Europe'
+
+
+
+
 
 5. Install xmldom modul
 % npm install xmldom --save
@@ -107,10 +130,6 @@ var RSS = require('rss');
             url: imgMatch
           });
 ---
-
-13. Add repository on github: https://github.com/
-
-
 
 
 
