@@ -36,6 +36,8 @@ pre 3. Install
 > azure webapp create --resource-group node-andrzej-rysuje-rg --plan node-andrzej-rysuje-sp --name node-andrzej-rysuje --location 'North Europe'
 
 
+4. Install winston modul (loggin)
+% npm install winston --save 
 
 
 
