@@ -9,7 +9,6 @@ const dom = require('xmldom').DOMParser;
 const RSS = require('rss');
 
 router.get('/', function (req, res, next) {
-
   const url = 'http://www.andrzejrysuje.pl/wordpress/feed/';
 
   request(url, function (error, response, xml) {
