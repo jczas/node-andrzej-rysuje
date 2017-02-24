@@ -1,27 +1,55 @@
-pre 1. Install node.js
-pre 2. Install express
+*** http://www.andrzejrysuje.pl/
+
+*** Zappier
+1. 2 steps (RSS->slack)
+2. 3 steps (RSS->Formatter->slack)
+
+*** Install express
 % npm install -g express-generator
 
-pre 3. Install 
-%n npm install -g nodemon
+*** Prepare new project in console:
+% express andrzej-rysuje --view=pug
 
-1. Prepare new project in console:
-% express node-andrzej-rysuje --view=pug
-
-2. Install modules
+*** Install modules
 % npm install
 
-3. Start node.js using nodemon
+*** Start application
+% npm start
+
+*** Open site in browser http://127.0.0.1:3000/
+
+*** Add repository on github: https://github.com/
+1. Create new repository 
+echo "# andrzej-rysuje" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/jczas/andrzej-rysuje.git
+git push -u origin master
+
+2. Create .gitignore: https://github.com/github/gitignore
+
+3. Add to repository, commit and push
+% git add *
+% git ci -m "init version"
+% git push
+
+*** Azure - add Web App and github source
+
+*** Visual Studio Code
+% code .
+
+*** Use nodemon
+1. Install 
+%n npm install -g nodemon
+
+2. Start node.js using nodemon
 % nodemon ./bin/www
 
-3.1. Open site in browser http://127.0.0.1:3000/
+*** Debuging
+Debuging with nodemon https://code.visualstudio.com/docs/editor/node-debugging
 
-3.2 How nodemon works
-
-3.3. Debuging
-
-3.4 Debuging with nodemon https://code.visualstudio.com/docs/editor/node-debugging
-3.4.1 Attache
+1. Attache
 ---
         {
             "type": "node",
@@ -31,7 +59,9 @@ pre 3. Install
             "port": 5858
         }
 ---
-3.4.2 Lunch
+% nodemon --debug=5858 ./bin/www
+
+2 Lunch
 ---
         {
             "type": "node",
@@ -50,47 +80,18 @@ pre 3. Install
         },
 ---
 
-4. Add repository on github: https://github.com/
-4.1. Create .gitignore: https://github.com/github/gitignore
-% echo "# node-andrzej-rysuje" >> README.md
-% git init
 
-4.2. Add to repository, commit and push
-% git add *
-% git ci -m "init version"
-% git remote add origin https://github.com/jczas/node-andrzej-rysuje.git
-% git push -u origin master
+*** Request rss from: http://www.andrzejrysuje.pl/wordpress/feed/
 
-5. Azure
-5.1 login
-> azure login
-> azure config mode arm
-> azure group create node-andrzej-rysuje-rg --location 'North Europe'
-> azure appserviceplan create --resource-group node-andrzej-rysuje-rg --name node-andrzej-rysuje-sp --location 'North Europe' --sku F1
-> azure webapp create --resource-group node-andrzej-rysuje-rg --plan node-andrzej-rysuje-sp --name node-andrzej-rysuje --location 'North Europe'
-
-
-4. Install winston modul (loggin)
-% npm install winston --save 
-
-
-
-5. Install xmldom modul
-% npm install xmldom --save
-
-6. Install xpath modul
-% npm install xpath --save
-
-7. Install request modul
+1 Install request modul
 % npm install request --save
 
-8. Request rss from: http://www.andrzejrysuje.pl/wordpress/feed/
-8.1. Import modul
+2 Import modul
 ---
 var request = require('request');
 ---
 
-8.2. Request rss
+3 Request rss
 --- 
   var url = 'http://www.andrzejrysuje.pl/wordpress/feed/';
 
@@ -104,14 +105,21 @@ var request = require('request');
   });
 ---
 
-9. Get img.src
-9.1. Import modules
+*** Find nodes in xml
+
+1 Install xmldom modul
+% npm install xmldom --save
+
+2 Install xpath modul
+% npm install xpath --save
+
+3 Import modules
 ---
-var xpath = require('xpath');
 var dom = require('xmldom').DOMParser;
+var xpath = require('xpath');
 ---
 
-9.2. Find nodes (encoded)
+4 Find nodes (encoded)
 ---
       var doc = new dom().parseFromString(xml);
       var select = xpath.useNamespaces({ 'content': 'http://purl.org/rss/1.0/modules/content/' });
@@ -119,32 +127,31 @@ var dom = require('xmldom').DOMParser;
       console.log('nodes.length: ' + nodes.length);
 ---
 
-10. Take img and alt with regex
+*** Take img and alt with regex
 ---
-      var imgEx = /src="([^"]*)"/;
-      var altEx = /alt="([^"]*)"/;
+            var imgEx = /src="([^"]*)"/;
 
-      for (var i = 0, len = nodes.length; i < len; i++) {
-        var data = nodes[i].firstChild.data;
+            for (var i = 0, len = nodes.length; i < len; i++) {
+                var data = nodes[i].firstChild.data;
 
-        var altMatch = altEx.exec(data);
-        var imgMatch = imgEx.exec(data);
-        if (imgMatch !== null && altMatch !== null) {
-          console.log('img: ' + imgMatch[1]);
-          console.log('alt: ' + altMatch[1]);
-        }      }
+                var imgMatch = imgEx.exec(data);
+                if (imgMatch !== null) {
+                    console.log('img: ' + imgMatch[1]);
+                }
+            }
+
 ---
 
-11. Install rss modul
+*** Generate rss feed
+1 Install rss modul
 % npm install rss --save
 
-12. Generate rss feed
-12.1. Import modul
+2 Import modul
 ---
 var RSS = require('rss');
 ---
 
-12.2. Create rss feed 
+3 Create rss feed 
 ---
       var feed = new RSS({
         title: 'Andrzej Rysuje',
@@ -154,18 +161,17 @@ var RSS = require('rss');
       });
 ---
 
-12.3. Return rss feed
+4 Return rss feed
 ---
                     res.set('Content-Type', 'text/xml');
                     res.send(feed.xml());
 ---
-12.4. Add item
+5 Add item
 ---
-          feed.item({
-            title: altMatch,
-            url: imgMatch
-          });
+                    feed.item({
+                        title: '',
+                        url: imgMatch[1]
+                    });
 ---
 
-
-
+*** Commit and push changes to git
