@@ -41,7 +41,7 @@ router.get('/', function (req, res, next) {
           }
           console.log('title: ' + title);
           feed.item({
-            title: '.',
+            title: title,
             url: imgMatch[1]
           });
         }
