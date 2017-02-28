@@ -37,7 +37,7 @@ router.get('/', function (req, res, next) {
 
           var titleMatch = titleEx.exec(imgMatch[1]);
           if (titleMatch !== null) {
-            title = titleMatch[1];
+            title = (titleMatch[1]).replace(/-/g, ' ');
           }
           console.log('title: ' + title);
           feed.item({
