@@ -24,6 +24,7 @@ router.get('/', function (req, res, next) {
       });
 
       var imgEx = /src="([^"]*)"/;
+      var titleEx = /\/([a-zA-z0-9-]*)\.png/;
 
       for (var i = 0, len = nodes.length; i < len; i++) {
         var data = nodes[i].firstChild.data;
@@ -32,8 +33,15 @@ router.get('/', function (req, res, next) {
         if (imgMatch !== null) {
           console.log('img: ' + imgMatch[1]);
 
+          var title = '.';
+
+          var titleMatch = titleEx.exec(imgMatch[1]);
+          if (titleMatch !== null) {
+            title = titleMatch[1];
+          }
+          console.log('title: ' + title);
           feed.item({
-            title: '',
+            title: '.',
             url: imgMatch[1]
           });
         }
